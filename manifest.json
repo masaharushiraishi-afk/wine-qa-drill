@@ -1,0 +1,9 @@
+{
+  "name":"Wine Q&A Drill",
+  "short_name":"WineQA",
+  "start_url":"./index.html",
+  "display":"standalone",
+  "background_color":"#f7f7f8",
+  "theme_color":"#111827",
+  "icons":[]
+}
