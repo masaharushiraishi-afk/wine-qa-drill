@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1739e6">
+<title>Wine Q&A Drill v3</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{
+  --blue:#1739e6;--blue2:#2e4cf0;--sky:#62abe7;--sky2:#b8dbf6;--ink:#111827;
+  --paper:#fff;--pale:#eef4fb;--line:#d9e2ef;--muted:#6b7280;--good:#198754;--mid:#d89414;--bad:#d44343;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--blue);color:var(--ink)}
+button,input,textarea,select{font:inherit}.hidden{display:none!important}
+#app{max-width:820px;margin:0 auto;min-height:100vh;background:var(--blue);padding-bottom:90px}
+.topbar{position:sticky;top:0;z-index:20;background:var(--blue);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.topbar h1{font-size:20px;margin:0;flex:1;text-align:center}.iconbtn{border:0;background:rgba(255,255,255,.9);color:#111;border-radius:12px;padding:9px 13px;cursor:pointer}.iconplain{border:0;background:transparent;color:#fff;font-size:26px;padding:4px 8px;cursor:pointer}
+.screen{padding:14px 18px 24px}.headline{color:#fff;text-align:center;margin:6px 0 18px}.headline h2{margin:0;font-size:24px}.headline p{margin:5px 0 0;color:#dbe7ff;font-size:13px}
+.categorypicker{display:flex;gap:8px;align-items:center;margin:8px 0 14px}.categorypicker select{flex:1;border:0;border-radius:14px;padding:12px 14px;background:#fff;color:#1739e6;font-weight:700}.categorypicker .countpill{white-space:nowrap;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:9px 12px;font-size:12px}.orderlist{display:grid;gap:8px;margin-top:10px}.orderrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#f6f8fc;border:1px solid #e2e8f0;border-radius:12px;padding:9px 10px}.ordername{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650}.orderbuttons{display:flex;gap:4px;flex-wrap:nowrap}.orderbuttons button{border:0;border-radius:9px;padding:7px 9px;background:#e8eef7;color:#334155;cursor:pointer}.orderbuttons button:disabled{opacity:.35}.ordersub{font-size:11px;color:#64748b;font-weight:500}.orderselect{margin-top:8px}
+.summary{background:var(--sky);border-radius:14px;padding:14px 18px;color:#fff;text-align:center;font-size:18px;margin-bottom:10px}.summary b{font-size:24px}
+.setgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.setcard{border:0;border-radius:14px;background:var(--sky);color:#fff;padding:18px 12px;text-align:center;min-height:130px;cursor:pointer;display:flex;flex-direction:column;justify-content:center}.setcard .name{font-size:19px;font-weight:650;line-height:1.25}.setcard .count{font-size:18px}.setcard .sub{font-size:11px;opacity:.92;margin-top:8px;line-height:1.4}.setcard .status{font-size:11px;margin-top:4px;opacity:.9}
+.whitecard{background:#fff;border-radius:28px;padding:20px;margin-bottom:18px}.sethero{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:center}.roundcircle{width:92px;height:92px;border-radius:50%;border:12px solid #e8eef7;display:grid;place-items:center;text-align:center;font-weight:700;font-size:26px}.roundcircle span{display:block;font-size:14px;font-weight:500;color:#64748b}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.metric label{display:block;font-size:12px;color:#94a3b8}.metric b{font-size:24px}.progress{height:7px;border-radius:99px;background:#e7edf5;overflow:hidden;margin-top:8px}.progress>div{height:100%;background:var(--blue);width:0}
+.settings{background:#fff;border-radius:28px;padding:18px 20px;margin-bottom:18px}.settings summary{cursor:pointer;font-weight:700;font-size:18px;list-style:none}.settings summary::-webkit-details-marker{display:none}.settingblock{margin-top:16px}.settingblock label{display:block;font-size:13px;color:#6b7280;margin-bottom:6px}.seg{display:grid;background:#eaf0f8;border-radius:999px;padding:4px;gap:4px}.seg.four{grid-template-columns:repeat(4,1fr)}.seg.two{grid-template-columns:repeat(2,1fr)}.seg button{border:0;border-radius:999px;padding:10px 6px;background:transparent;color:#64748b;cursor:pointer}.seg button.active{background:var(--blue);color:#fff}
+.bigaction{width:100%;border:0;border-radius:22px;padding:20px 18px;text-align:left;background:var(--sky);color:#0b2f70;margin-bottom:14px;cursor:pointer;display:flex;align-items:center}.bigaction strong{display:block;font-size:22px}.bigaction span{font-size:13px}.bigaction .go{margin-left:auto;font-size:24px}.bigaction.secondary{background:#3048ef;color:#fff}.smallactions{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.smallaction{border:0;border-radius:18px;padding:16px;background:#fff;text-align:left;cursor:pointer}.smallaction strong{display:block;font-size:17px}.badge{float:right;background:#fde9bd;color:#8a6116;border-radius:99px;padding:5px 9px;font-size:13px}
+.studybar{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;color:#fff;padding:10px 14px;position:sticky;top:0;background:var(--blue);z-index:30}.studybar .left{text-align:left}.studybar .center{text-align:center;font-size:23px}.studybar .right{text-align:right}.studybar button{background:#fff;border:0;border-radius:10px;padding:9px 13px}
+.studywrap{padding:8px 18px 14px}.qcard{background:#fff;border-radius:18px;padding:26px 28px;min-height:350px;display:flex;flex-direction:column;justify-content:center;position:relative}.qtext{font-size:27px;line-height:1.55}.qmeta{position:absolute;right:20px;bottom:10px;color:#d3d7dd;font-size:12px}.tap{margin-top:10px;border:0;border-radius:18px;min-height:250px;width:100%;background:#bdddf7;font-size:44px;cursor:pointer}.answerbox{margin-top:10px;border-radius:18px;background:#d6eafa;padding:22px;min-height:150px;font-size:24px;line-height:1.5}.explain{font-size:15px;color:#405469;margin-top:12px;white-space:pre-wrap}.choices{display:grid;gap:10px;margin-top:12px}.choice{border:0;border-radius:16px;background:#e8f2fb;padding:18px;font-size:21px;text-align:left;cursor:pointer}.choice.selected{outline:4px solid #729cd0}.choice.correct{background:#dff4e8}.choice.wrong{background:#f8dddd}
+.gradebar{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.gradebar button{border:0;border-radius:14px;padding:17px 8px;font-size:18px;color:#fff;cursor:pointer}.gradebar .g{background:var(--good)}.gradebar .m{background:var(--mid)}.gradebar .b{background:var(--bad)}.studyextra{display:flex;gap:8px;margin-top:10px}.studyextra button{flex:1;border:0;border-radius:12px;padding:12px;background:#eef4fb}.studyextra .fav.on{background:#ffe8a6}
+.resulthead{background:var(--sky2);padding:24px 18px;text-align:center}.resulthead h2{margin:0}.resultstats{font-size:19px;line-height:1.6}.resultlist{background:var(--sky2)}.resultitem{display:grid;grid-template-columns:45px 1fr;gap:8px;border-top:1px solid #fff;padding:14px 18px}.resultitem .idx{font-size:20px}.resultitem .qa{font-size:17px}.resultitem .ans{margin-top:8px;text-align:right}.resultitem .mark{font-weight:700}.resultitem.good .mark{color:var(--good)}.resultitem.mid .mark{color:var(--mid)}.resultitem.bad .mark{color:var(--bad)}
+.bottomnav{position:fixed;z-index:40;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,calc(100% - 28px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);padding:8px;border-radius:28px 28px 0 0}.bottomnav button{border:0;background:transparent;color:#334155;padding:8px 4px;cursor:pointer}.bottomnav button.active{background:#dce9ff;border-radius:18px;color:var(--blue);font-weight:700}.navicon{font-size:22px;display:block}
+.managecard{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px}.managecard h3{margin:0 0 12px}.row{display:flex;gap:8px;flex-wrap:wrap}.grow{flex:1;min-width:160px}input,textarea,select{width:100%;border:1px solid #cfd9e8;border-radius:12px;padding:11px;background:#fff}textarea{min-height:130px;resize:vertical}.btn{border:0;border-radius:12px;padding:11px 14px;background:var(--blue);color:#fff;cursor:pointer}.btn.light{background:#eef4fb;color:#1e293b}.btn.bad{background:#c93f3f}.muted{font-size:12px;color:#6b7280}.tablewrap{overflow:auto;max-height:440px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.statbox{background:#fff;border-radius:16px;padding:15px;text-align:center}.statbox b{font-size:24px;display:block}.syncnotice{background:#edf3ff;border-radius:12px;padding:12px;color:#334e8d;margin-bottom:12px}
+@media(max-width:620px){.screen{padding:10px 12px 22px}.topbar{padding:10px 12px}.setgrid{gap:8px}.setcard{min-height:115px;padding:14px 8px}.setcard .name{font-size:17px}.sethero{grid-template-columns:90px 1fr}.roundcircle{width:78px;height:78px;border-width:10px;font-size:22px}.metric b{font-size:20px}.qcard{min-height:330px;padding:22px}.qtext{font-size:22px}.tap{min-height:230px;font-size:36px}.answerbox{font-size:21px}.statgrid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="homeScreen" class="screen">
+    <div class="topbar"><button class="iconplain" id="homeSettings">⚙</button><h1>Wine Q&A Drill</h1><button class="iconplain" id="searchBtn">⌕</button></div>
+    <div class="categorypicker"><select id="categorySelect" aria-label="大分類"></select><span class="countpill" id="categoryCount">0分類</span></div>
+    <div class="summary">累積正解ポイント：<b id="totalPoints">0</b></div>
+    <div class="setgrid" id="setGrid"></div>
+  </div>
+
+  <div id="setScreen" class="screen hidden">
+    <div class="topbar"><button class="iconplain" id="setBack">←</button><h1 id="setTitle">セット</h1><button class="iconplain" id="setFav">☆</button></div>
+    <div class="whitecard">
+      <div class="sethero">
+        <div class="roundcircle"><div><b id="setRound">1</b><span>周目</span></div></div>
+        <div>
+          <div style="font-size:22px;font-weight:700"><span id="setCount">0</span>問</div>
+          <div class="metrics"><div class="metric"><label>正解ポイント</label><b id="setPoints">0</b></div><div class="metric"><label>最高</label><b id="setBest">-</b></div><div class="metric"><label>平均</label><b id="setAvg">-</b></div></div>
+          <div class="muted" id="setRemain">1周まで残り 0/0問</div><div class="progress"><div id="setProgress"></div></div>
+        </div>
+      </div>
+    </div>
+    <details class="settings" id="studySettings"><summary>出題設定</summary>
+      <div class="settingblock"><label>問題数</label><div class="seg four" data-setting="count"><button data-v="5">5</button><button data-v="10">10</button><button data-v="20">20</button><button data-v="all" class="active">全問</button></div></div>
+      <div class="settingblock"><label>出題順</label><div class="seg two" data-setting="order"><button data-v="normal">登録順</button><button data-v="shuffle" class="active">シャッフル</button></div></div>
+      <div class="settingblock"><label>開始位置</label><div class="seg two" data-setting="start"><button data-v="begin" class="active">初めから</button><button data-v="continue">続きから</button></div></div>
+    </details>
+    <button class="bigaction" id="confirmStart"><div><strong>確認テスト</strong><span>設定条件で周回する</span></div><div class="go">▶</div></button>
+    <button class="bigaction secondary" id="quick15"><div><strong>テスト 15問</strong><span>実力チェック・シャッフル</span></div><div class="go">▶</div></button>
+    <div class="smallactions"><button class="smallaction" id="reviewStart"><span class="badge" id="reviewBadge">0</span><strong>復習リスト</strong><span class="muted">△・×の問題</span></button><button class="smallaction" id="myStart"><span class="badge" id="myBadge">0</span><strong>マイリスト</strong><span class="muted">お気に入り</span></button></div>
+  </div>
+
+  <div id="studyScreen" class="hidden">
+    <div class="studybar"><div class="left"><button id="studySettingsBtn">設定</button></div><div class="center"><span id="studyIndex">1</span>/<span id="studyTotal">1</span>問</div><div class="right"><button id="studyEnd">End</button></div></div>
+    <div class="studywrap">
+      <div style="text-align:right;color:#fff;margin-bottom:5px" id="studyRemaining"></div>
+      <div class="qcard"><div class="qtext" id="questionText"></div><div class="qmeta" id="questionMeta"></div></div>
+      <button class="tap" id="tapAnswer">Tap</button>
+      <div id="answerArea" class="hidden"><div class="answerbox"><div id="answerText"></div><div class="explain" id="explanationText"></div></div><div id="choiceArea" class="choices"></div></div>
+      <div id="gradeArea" class="gradebar hidden"><button class="g" data-grade="2">○ 正解</button><button class="m" data-grade="1">△ 曖昧</button><button class="b" data-grade="0">× 不正解</button></div>
+      <div class="studyextra"><button id="favToggle" class="fav">☆ マイリスト</button><button id="passBtn">PASS</button></div>
+    </div>
+  </div>
+
+  <div id="resultScreen" class="hidden">
+    <div class="resulthead"><h2 id="resultTitle"></h2><div class="resultstats" id="resultStats"></div><div style="margin-top:10px"><button class="btn light" id="resultAgain">もう一度</button> <button class="btn" id="resultBack">戻る</button></div></div>
+    <div class="resultlist" id="resultList"></div>
+  </div>
+
+  <div id="manageScreen" class="screen hidden">
+    <div class="topbar"><h1>問題作成</h1></div>
+    <div class="managecard">
+      <h3>セットを作る / 選ぶ</h3>
+      <div class="row"><input class="grow" id="mCategory" placeholder="大分類 例：フランス"><input class="grow" id="mSet" placeholder="セット名 例：ボルドー"></div>
+      <p class="muted">同じ大分類・セット名で追加すると同じセットに入ります。</p>
+    </div>
+    <div class="managecard">
+      <h3>高速一括入力</h3>
+      <p class="muted">1行1問。「問題[TAB]答え[TAB]解説[TAB]選択肢」または「問題｜答え｜解説」。選択肢は「A;;B;;C;;D」のように ;; 区切り。解説・選択肢は省略可。</p>
+      <textarea id="bulkText" placeholder="Barolo DOCGの主要品種は？\tNebbiolo\tPiemonte州\nMargaux A.O.C.で認められる色は？\t赤"></textarea>
+      <div class="row"><button class="btn" id="bulkAdd">まとめて追加</button><span class="muted" id="bulkMsg"></span></div>
+    </div>
+    <div class="managecard">
+      <h3>1問ずつ追加</h3>
+      <textarea id="singleQ" placeholder="問題文"></textarea><textarea id="singleA" placeholder="答え"></textarea><textarea id="singleE" placeholder="解説（任意）"></textarea><input id="singleChoices" placeholder="選択肢（任意） 例：A;;B;;C;;D"><div style="margin-top:8px"><button class="btn" id="singleAdd">追加</button></div>
+    </div>
+    <div class="managecard">
+      <h3>並び替え</h3>
+      <p class="muted">大分類・セット・セット内問題の表示順を変更できます。↑↓は1つ移動、⇈⇊は先頭・末尾へ移動です。成績履歴や問題IDは変わりません。</p>
+      <details open><summary><b>大分類の順番</b></summary><div class="orderlist" id="categoryOrderList"></div></details>
+      <details style="margin-top:14px"><summary><b>セットの順番</b></summary><select class="orderselect" id="orderCategorySelect"></select><div class="orderlist" id="setOrderList"></div></details>
+      <details style="margin-top:14px"><summary><b>セット内の問題順</b></summary><select class="orderselect" id="orderSetSelect"></select><div class="orderlist" id="questionOrderList"></div></details>
+    </div>
+    <div class="managecard"><div class="row"><h3 class="grow">問題一覧</h3><button class="btn light" id="exportCsv">CSV</button><button class="btn light" id="backupJson">JSON</button></div><div class="tablewrap"><table><thead><tr><th>セット</th><th>問題</th><th>答え</th><th></th></tr></thead><tbody id="questionRows"></tbody></table></div></div>
+  </div>
+
+  <div id="statsScreen" class="screen hidden">
+    <div class="topbar"><h1>分析</h1></div>
+    <div class="statgrid"><div class="statbox"><b id="stTotal">0</b>全問題</div><div class="statbox"><b id="stGood">0</b>○</div><div class="statbox"><b id="stMid">0</b>△</div><div class="statbox"><b id="stBad">0</b>×</div></div>
+    <div class="managecard" style="margin-top:12px"><h3>自動分類</h3><p class="muted">直近の評価を基準に、○＝定着候補、△＝曖昧、×＝要復習として自動分類します。周回履歴は消さずに蓄積します。</p><div class="tablewrap"><table><thead><tr><th>セット</th><th>問</th><th>○</th><th>△</th><th>×</th><th>未</th><th>周</th></tr></thead><tbody id="setStatsRows"></tbody></table></div></div>
+  </div>
+
+  <div id="settingsScreen" class="screen hidden">
+    <div class="topbar"><button class="iconplain" id="settingsBack">←</button><h1>設定</h1><div></div></div>
+    <div class="managecard"><h3>バックアップ</h3><p class="muted">アプリ本体と学習データは分離しています。アップデート前にJSONバックアップを保存しておけば、問題・並び順・周回履歴・○△×履歴・マイリストを新しい版へ復元できます。</p><div class="row"><button class="btn light" id="exportAll">JSONバックアップ</button><input class="grow" type="file" id="restoreFile" accept=".json"><button class="btn light" id="restoreBtn">復元</button></div><p class="muted" id="versionInfo"></p></div>
+    <div class="managecard"><h3>PC・スマホ同期（Supabase）</h3><div class="syncnotice" id="syncStatus">未設定</div><input id="supabaseUrl" placeholder="Project URL"><input id="supabaseKey" style="margin-top:8px" placeholder="Publishable key"><button class="btn" id="saveCloud" style="margin-top:8px">設定保存</button><div class="row" style="margin-top:10px"><input class="grow" id="email" type="email" placeholder="email"><input class="grow" id="password" type="password" placeholder="password"></div><div class="row" style="margin-top:8px"><button class="btn light" id="signUp">登録</button><button class="btn light" id="signIn">ログイン</button><button class="btn light" id="signOut">ログアウト</button><button class="btn" id="pushCloud">クラウドへ保存</button><button class="btn light" id="pullCloud">クラウドから読込</button></div></div>
+    <div class="managecard"><button class="btn bad" id="resetProgress">学習履歴だけ全削除</button></div>
+  </div>
+
+  <nav class="bottomnav" id="bottomNav"><button data-nav="home" class="active"><span class="navicon">⌂</span>ホーム</button><button data-nav="manage"><span class="navicon">✎</span>作成</button><button data-nav="stats"><span class="navicon">◔</span>分析</button><button data-nav="settings"><span class="navicon">☰</span>設定</button></nav>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const APP_VERSION='3.1.0', DATA_VERSION=3; const K={Q:'wq_v2_questions',P:'wq_v2_progress',M:'wq_v2_meta',F:'wq_v2_fav',CFG:'wq_v2_cfg'};
+const $=id=>document.getElementById(id), load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}, saveK=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+let questions=load(K.Q,[]), progress=load(K.P,{}), meta=load(K.M,{sets:{}}), favorites=new Set(load(K.F,[]));
+let activeCategory='すべて', activeSet=null, session=null, lastSessionConfig=null, sb=null, user=null;
+meta.dataVersion=meta.dataVersion||1; meta.order=meta.order||{categories:[],sets:{},questions:{}};
+if(!questions.length){questions=[
+{id:'S1',category:'France',set:'Bordeaux',question:'Margaux A.O.C.で認められる色は？',answer:'赤',explanation:'村名A.O.C. Margauxは赤ワインのみ。',choices:[]},
+{id:'S2',category:'France',set:'Bourgogne',question:'Chablis A.O.C.の主要品種は？',answer:'Chardonnay',explanation:'ブルゴーニュ北部の白ワイン産地。',choices:[]},
+{id:'S3',category:'Italy',set:'Piemonte',question:'Barolo D.O.C.G.の主要品種は？',answer:'Nebbiolo',explanation:'Piemonte州を代表する赤ワイン。',choices:[]},
+{id:'S4',category:'Wine Basics',set:'醸造',question:'アルコール発酵で糖から主に生じるものは？',answer:'エタノールと二酸化炭素',explanation:'酵母によるアルコール発酵。',choices:['エタノールと二酸化炭素','乳酸と二酸化炭素','酢酸と酸素','エタノールと窒素']}
+];saveK(K.Q,questions)}
+function persist(){saveK(K.Q,questions);saveK(K.P,progress);saveK(K.M,meta);saveK(K.F,[...favorites]);renderAll();autoPush()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function setKey(q){return `${q.category}|||${q.set}`};function parseSetKey(k){const [category,set]=k.split('|||');return{category,set}}
+function ensureOrder(){
+  meta.order=meta.order||{categories:[],sets:{},questions:{}};
+  const seenCats=[];questions.forEach(q=>{if(!seenCats.includes(q.category))seenCats.push(q.category)});
+  meta.order.categories=(meta.order.categories||[]).filter(c=>seenCats.includes(c));seenCats.forEach(c=>{if(!meta.order.categories.includes(c))meta.order.categories.push(c)});
+  for(const c of seenCats){const seenSets=[];questions.filter(q=>q.category===c).forEach(q=>{if(!seenSets.includes(q.set))seenSets.push(q.set)});meta.order.sets[c]=(meta.order.sets[c]||[]).filter(x=>seenSets.includes(x));seenSets.forEach(x=>{if(!meta.order.sets[c].includes(x))meta.order.sets[c].push(x)})}
+  Object.keys(meta.order.sets||{}).forEach(c=>{if(!seenCats.includes(c))delete meta.order.sets[c]});
+  const liveKeys=new Set();for(const c of seenCats){for(const st of (meta.order.sets[c]||[])){const k=`${c}|||${st}`;liveKeys.add(k);const ids=questions.filter(q=>q.category===c&&q.set===st).map(q=>q.id);meta.order.questions[k]=(meta.order.questions[k]||[]).filter(id=>ids.includes(id));ids.forEach(id=>{if(!meta.order.questions[k].includes(id))meta.order.questions[k].push(id)})}}
+  Object.keys(meta.order.questions||{}).forEach(k=>{if(!liveKeys.has(k))delete meta.order.questions[k]});meta.dataVersion=DATA_VERSION;
+}
+function categories(){ensureOrder();return [...meta.order.categories]}
+function orderedQuestionsForKey(k,arr){ensureOrder();const ids=meta.order.questions[k]||[];const pos=new Map(ids.map((id,i)=>[id,i]));return [...arr].sort((a,b)=>(pos.get(a.id)??999999)-(pos.get(b.id)??999999))}
+function sets(){ensureOrder();const m=new Map();questions.forEach(q=>{const k=setKey(q);if(!m.has(k))m.set(k,{...parseSetKey(k),questions:[]});m.get(k).questions.push(q)});const out=[];for(const c of categories()){for(const st of (meta.order.sets[c]||[])){const k=`${c}|||${st}`,g=m.get(k);if(g){g.questions=orderedQuestionsForKey(k,g.questions);out.push(g)}}}return out}
+function p(qid){return progress[qid]||{history:[],last:null}}
+function classOf(qid){const x=p(qid).last;return x===2?'good':x===1?'mid':x===0?'bad':'unseen'}
+function setMeta(k){meta.sets[k]??={round:1,completedRounds:[],cursor:0,lastStudy:null};return meta.sets[k]}
+function showScreen(name){['home','set','study','result','manage','stats','settings'].forEach(n=>$(n+'Screen').classList.toggle('hidden',n!==name));$('bottomNav').classList.toggle('hidden',['study','result','set'].includes(name));document.querySelectorAll('#bottomNav button').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));window.scrollTo(0,0)}
+function fmtAgo(iso){if(!iso)return'未学習';const ms=Date.now()-new Date(iso).getTime(),d=Math.floor(ms/86400000);if(d>0)return`前回から ${d}日`;const h=Math.floor(ms/3600000);if(h>0)return`前回から ${h}時間`;const m=Math.floor(ms/60000);return`前回から ${Math.max(0,m)}分`}
+function renderHome(){const ss=sets(),cats=categories();if(activeCategory!=='すべて'&&!cats.includes(activeCategory))activeCategory='すべて';const sel=$('categorySelect');sel.innerHTML=['すべて',...cats].map(c=>`<option value="${esc(c)}" ${c===activeCategory?'selected':''}>${c==='すべて'?'すべての大分類':esc(c)}</option>`).join('');sel.onchange=()=>{activeCategory=sel.value;renderHome()};$('categoryCount').textContent=`${cats.length}分類`;let total=0;Object.values(progress).forEach(x=>{total+=(x.history||[]).filter(h=>h.grade===2).length});$('totalPoints').textContent=total;const view=ss.filter(s=>activeCategory==='すべて'||s.category===activeCategory);$('setGrid').innerHTML=view.map(s=>{const k=`${s.category}|||${s.set}`,m=setMeta(k);const correct=(s.questions||[]).reduce((a,q)=>a+(p(q.id).history||[]).filter(h=>h.grade===2).length,0);const remain=Math.max(0,s.questions.length-(m.cursor||0));return `<button class="setcard" data-k="${esc(k)}"><div class="name">${esc(s.set)}: <span class="count">${s.questions.length}</span></div><div class="sub">${activeCategory==='すべて'?esc(s.category)+'<br>':''}${fmtAgo(m.lastStudy)}<br>累積正解：${correct}</div><div class="status">${m.round}周目・残り${remain}/${s.questions.length}</div></button>`}).join('')||'<div style="color:#fff">セットがありません。作成タブから追加してください。</div>';document.querySelectorAll('.setcard').forEach(b=>b.onclick=()=>openSet(b.dataset.k))}
+function openSet(k){activeSet=k;renderSet();showScreen('set')}
+let settings={count:'all',order:'shuffle',start:'begin'};
+function renderSet(){const s=sets().find(x=>`${x.category}|||${x.set}`===activeSet);if(!s){showScreen('home');return}const m=setMeta(activeSet),qs=s.questions;let totalPoints=0;qs.forEach(q=>totalPoints+=(p(q.id).history||[]).filter(h=>h.grade===2).length);const rounds=m.completedRounds||[],scores=rounds.map(r=>r.total?Math.round((r.good/r.total)*1000)/10:0);$('setTitle').textContent=s.set;$('setRound').textContent=m.round||1;$('setCount').textContent=qs.length;$('setPoints').textContent=totalPoints;$('setBest').textContent=scores.length?Math.max(...scores).toFixed(1):'-';$('setAvg').textContent=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):'-';const remain=Math.max(0,qs.length-(m.cursor||0));$('setRemain').textContent=`1周まで残り ${remain}/${qs.length}問`;$('setProgress').style.width=`${qs.length?((qs.length-remain)/qs.length)*100:0}%`;$('reviewBadge').textContent=qs.filter(q=>['mid','bad'].includes(classOf(q.id))).length;$('myBadge').textContent=qs.filter(q=>favorites.has(q.id)).length;$('setFav').textContent=qs.length&&qs.every(q=>favorites.has(q.id))?'★':'☆'}
+function selectedSeg(name,val){settings[name]=val;document.querySelectorAll(`.seg[data-setting="${name}"] button`).forEach(b=>b.classList.toggle('active',b.dataset.v===val))}
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>selectedSeg(b.parentElement.dataset.setting,b.dataset.v));
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildSession(mode='normal',force15=false){const s=sets().find(x=>`${x.category}|||${x.set}`===activeSet);if(!s)return;let qs=[...s.questions];if(mode==='review')qs=qs.filter(q=>['mid','bad'].includes(classOf(q.id)));if(mode==='my')qs=qs.filter(q=>favorites.has(q.id));const m=setMeta(activeSet);if(settings.start==='continue'&&mode==='normal'&&!force15){const cursor=Math.min(m.cursor||0,qs.length);qs=qs.slice(cursor)}if(force15){qs=shuffle(qs).slice(0,15)}else{if(settings.order==='shuffle')qs=shuffle(qs);if(settings.count!=='all')qs=qs.slice(0,Number(settings.count))}if(!qs.length)return alert('この条件に該当する問題がありません。');session={setKey:activeSet,ids:qs.map(q=>q.id),index:0,grades:{},passes:[],mode,round:m.round||1,startedAt:new Date().toISOString(),revealed:false};lastSessionConfig={mode,force15};renderStudy();showScreen('study')}
+function curQ(){return questions.find(q=>q.id===session.ids[session.index])}
+function renderStudy(){const q=curQ();if(!q)return finishSession();$('studyIndex').textContent=session.index+1;$('studyTotal').textContent=session.ids.length;$('studyRemaining').textContent=`残り ${session.ids.length-session.index}/${session.ids.length}問`;$('questionText').textContent=q.question;$('questionMeta').textContent=`${q.category} / ${q.set}`;$('tapAnswer').classList.toggle('hidden',session.revealed);$('answerArea').classList.toggle('hidden',!session.revealed);$('gradeArea').classList.toggle('hidden',!session.revealed);$('answerText').textContent=q.answer;$('explanationText').textContent=q.explanation||'';$('favToggle').classList.toggle('on',favorites.has(q.id));$('favToggle').textContent=(favorites.has(q.id)?'★':'☆')+' マイリスト';const ca=$('choiceArea');ca.innerHTML='';if(session.revealed&&q.choices&&q.choices.length){ca.innerHTML=q.choices.map(c=>`<button class="choice ${c===q.answer?'correct':''}">${esc(c)}</button>`).join('')}}
+function reveal(){session.revealed=true;renderStudy()}
+function grade(g){const q=curQ(),rec=p(q.id);rec.history=rec.history||[];rec.history.push({grade:g,at:new Date().toISOString(),set:activeSet,round:session.round});rec.last=g;progress[q.id]=rec;session.grades[q.id]=g;advance()}
+function pass(){const q=curQ();session.passes.push(q.id);advance()}
+function advance(){const m=setMeta(activeSet);m.lastStudy=new Date().toISOString();if(session.mode==='normal'&&settings.start==='continue')m.cursor=(m.cursor||0)+1;persist();if(session.index<session.ids.length-1){session.index++;session.revealed=false;renderStudy()}else finishSession()}
+function finishSession(){const vals=Object.values(session.grades),good=vals.filter(x=>x===2).length,mid=vals.filter(x=>x===1).length,bad=vals.filter(x=>x===0).length,passN=session.passes.length,total=session.ids.length,m=setMeta(session.setKey);if(session.mode==='normal'&&session.ids.length===sets().find(x=>`${x.category}|||${x.set}`===session.setKey)?.questions.length){m.completedRounds=m.completedRounds||[];m.completedRounds.push({round:m.round,total,good,mid,bad,pass:passN,at:new Date().toISOString()});m.round=(m.round||1)+1;m.cursor=0}persist();$('resultTitle').textContent=`「${parseSetKey(session.setKey).set}」 学習結果`;$('resultStats').innerHTML=`正解 ${good}/${total}問　△ ${mid}　× ${bad}　PASS ${passN}<br>正解率 ${(total?good/total*100:0).toFixed(1)}%`;$('resultList').innerHTML=session.ids.map((id,i)=>{const q=questions.find(x=>x.id===id),g=session.grades[id];const cls=g===2?'good':g===1?'mid':g===0?'bad':'mid',mark=g===2?'○':g===1?'△':g===0?'×':'PASS';return `<div class="resultitem ${cls}"><div class="idx">${i+1}<br><span class="mark">${mark}</span></div><div class="qa">${esc(q?.question||'')}<div class="ans">${esc(q?.answer||'')}</div></div></div>`}).join('');showScreen('result')}
+function splitLine(line){if(line.includes('\t'))return line.split('\t');if(line.includes('｜'))return line.split('｜');if(line.includes('|'))return line.split('|');return[line]}
+function addBulk(){const category=$('mCategory').value.trim()||'未分類',set=$('mSet').value.trim()||'未分類',lines=$('bulkText').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);let n=0,skip=0;lines.forEach((line,i)=>{const a=splitLine(line).map(x=>x.trim()),question=a[0],answer=a[1];if(!question||!answer){skip++;return}questions.push({id:`Q${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}`,category,set,question,answer,explanation:a[2]||'',choices:(a[3]||'').split(';;').map(x=>x.trim()).filter(Boolean)});n++});$('bulkText').value='';persist();$('bulkMsg').textContent=`${n}問追加${skip?` / ${skip}行スキップ`:''}`}
+function addSingle(){const category=$('mCategory').value.trim()||'未分類',set=$('mSet').value.trim()||'未分類',question=$('singleQ').value.trim(),answer=$('singleA').value.trim();if(!question||!answer)return alert('問題と答えは必須です。');questions.push({id:`Q${Date.now()}_${Math.random().toString(36).slice(2,6)}`,category,set,question,answer,explanation:$('singleE').value.trim(),choices:$('singleChoices').value.split(';;').map(x=>x.trim()).filter(Boolean)});$('singleQ').value=$('singleA').value=$('singleE').value=$('singleChoices').value='';persist()}
+function moveItem(arr,i,dir){const j=dir==='top'?0:dir==='bottom'?arr.length-1:i+(dir==='up'?-1:1);if(j<0||j>=arr.length||j===i)return;const [x]=arr.splice(i,1);arr.splice(j,0,x);persist()}
+function orderButtons(kind,i,len,key=''){return `<div class="orderbuttons"><button data-order="${kind}" data-key="${esc(key)}" data-i="${i}" data-dir="top" ${i===0?'disabled':''}>⇈</button><button data-order="${kind}" data-key="${esc(key)}" data-i="${i}" data-dir="up" ${i===0?'disabled':''}>↑</button><button data-order="${kind}" data-key="${esc(key)}" data-i="${i}" data-dir="down" ${i===len-1?'disabled':''}>↓</button><button data-order="${kind}" data-key="${esc(key)}" data-i="${i}" data-dir="bottom" ${i===len-1?'disabled':''}>⇊</button></div>`}
+function bindOrderButtons(){document.querySelectorAll('[data-order]').forEach(b=>b.onclick=()=>{const kind=b.dataset.order,i=Number(b.dataset.i),dir=b.dataset.dir,key=b.dataset.key;if(kind==='cat')moveItem(meta.order.categories,i,dir);else if(kind==='set')moveItem(meta.order.sets[key],i,dir);else if(kind==='q')moveItem(meta.order.questions[key],i,dir)})}
+function renderManage(){ensureOrder();$('questionRows').innerHTML=sets().flatMap(s=>s.questions.map(q=>`<tr><td>${esc(q.category)} / ${esc(q.set)}</td><td>${esc(q.question)}</td><td>${esc(q.answer)}</td><td><button class="btn bad del" data-id="${esc(q.id)}">削除</button></td></tr>`)).join('');document.querySelectorAll('.del').forEach(b=>b.onclick=()=>{if(confirm('削除しますか？')){questions=questions.filter(q=>q.id!==b.dataset.id);delete progress[b.dataset.id];favorites.delete(b.dataset.id);persist()}});
+ const cats=categories();$('categoryOrderList').innerHTML=cats.map((c,i)=>`<div class="orderrow"><div class="ordername">${i+1}. ${esc(c)}<div class="ordersub">${questions.filter(q=>q.category===c).length}問</div></div>${orderButtons('cat',i,cats.length)}</div>`).join('')||'<span class="muted">大分類がありません</span>';
+ const oc=$('orderCategorySelect');const prevC=oc.value;oc.innerHTML=cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');if(cats.includes(prevC))oc.value=prevC;const c=oc.value||cats[0]||'';const sts=meta.order.sets[c]||[];$('setOrderList').innerHTML=sts.map((st,i)=>`<div class="orderrow"><div class="ordername">${i+1}. ${esc(st)}<div class="ordersub">${questions.filter(q=>q.category===c&&q.set===st).length}問</div></div>${orderButtons('set',i,sts.length,c)}</div>`).join('')||'<span class="muted">セットがありません</span>';oc.onchange=()=>renderManage();
+ const os=$('orderSetSelect');const prevS=os.value;const allSets=sets();os.innerHTML=allSets.map(x=>{const k=`${x.category}|||${x.set}`;return `<option value="${esc(k)}">${esc(x.category)} / ${esc(x.set)}</option>`}).join('');if(allSets.some(x=>`${x.category}|||${x.set}`===prevS))os.value=prevS;const k=os.value||(allSets[0]?`${allSets[0].category}|||${allSets[0].set}`:'');const ids=meta.order.questions[k]||[];$('questionOrderList').innerHTML=ids.map((id,i)=>{const q=questions.find(x=>x.id===id);return q?`<div class="orderrow"><div class="ordername">${i+1}. ${esc(q.question)}<div class="ordersub">${esc(q.answer)}</div></div>${orderButtons('q',i,ids.length,k)}</div>`:''}).join('')||'<span class="muted">問題がありません</span>';os.onchange=()=>renderManage();bindOrderButtons()}
+function renderStats(){const c=questions.map(q=>classOf(q.id));$('stTotal').textContent=questions.length;$('stGood').textContent=c.filter(x=>x==='good').length;$('stMid').textContent=c.filter(x=>x==='mid').length;$('stBad').textContent=c.filter(x=>x==='bad').length;$('setStatsRows').innerHTML=sets().map(s=>{const cls=s.questions.map(q=>classOf(q.id)),m=setMeta(`${s.category}|||${s.set}`);return `<tr><td>${esc(s.category)} / ${esc(s.set)}</td><td>${s.questions.length}</td><td>${cls.filter(x=>x==='good').length}</td><td>${cls.filter(x=>x==='mid').length}</td><td>${cls.filter(x=>x==='bad').length}</td><td>${cls.filter(x=>x==='unseen').length}</td><td>${m.round}</td></tr>`}).join('')}
+function csvEscape(v){v=String(v??'');return /[",\n\r]/.test(v)?`"${v.replaceAll('"','""')}"`:v}
+function download(name,text,type='text/plain'){const b=new Blob([text],{type}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),500)}
+function renderAll(){renderHome();renderManage();renderStats();if(activeSet)renderSet()}
+// nav/events
+$('setBack').onclick=()=>showScreen('home');$('homeSettings').onclick=()=>showScreen('settings');$('settingsBack').onclick=()=>showScreen('home');
+document.querySelectorAll('#bottomNav button').forEach(b=>b.onclick=()=>{showScreen(b.dataset.nav);if(b.dataset.nav==='home')renderHome();if(b.dataset.nav==='manage')renderManage();if(b.dataset.nav==='stats')renderStats()});
+$('confirmStart').onclick=()=>buildSession('normal',false);$('quick15').onclick=()=>buildSession('normal',true);$('reviewStart').onclick=()=>buildSession('review',false);$('myStart').onclick=()=>buildSession('my',false);$('tapAnswer').onclick=reveal;document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>grade(Number(b.dataset.grade)));$('passBtn').onclick=pass;$('favToggle').onclick=()=>{const q=curQ();favorites.has(q.id)?favorites.delete(q.id):favorites.add(q.id);persist();renderStudy()};$('studyEnd').onclick=()=>{if(confirm('現在の周回を終了しますか？'))finishSession()};$('resultBack').onclick=()=>{renderSet();showScreen('set')};$('resultAgain').onclick=()=>{if(lastSessionConfig)buildSession(lastSessionConfig.mode,lastSessionConfig.force15)};$('bulkAdd').onclick=addBulk;$('singleAdd').onclick=addSingle;
+$('exportCsv').onclick=()=>{const h=['id','category','set','question','answer','explanation','choices'];download('wineqa_questions.csv',[h.join(','),...questions.map(q=>h.map(k=>csvEscape(k==='choices'?(q.choices||[]).join(';;'):q[k])).join(','))].join('\n'),'text/csv;charset=utf-8')};
+$('backupJson').onclick=$('exportAll').onclick=()=>download('wineqa_backup.json',JSON.stringify({app:'Wine Q&A Drill',appVersion:APP_VERSION,dataVersion:DATA_VERSION,questions,progress,meta,favorites:[...favorites],at:new Date().toISOString()},null,2),'application/json');$('restoreBtn').onclick=async()=>{const f=$('restoreFile').files[0];if(!f)return alert('JSONを選択してください');try{const d=JSON.parse(await f.text());questions=d.questions||[];progress=d.progress||{};meta=d.meta||{sets:{}};meta.order=meta.order||{categories:[],sets:{},questions:{}};favorites=new Set(d.favorites||[]);ensureOrder();persist();alert('復元しました')}catch(e){alert('復元失敗: '+e.message)}};$('resetProgress').onclick=()=>{if(confirm('学習履歴をすべて削除しますか？')){progress={};meta={sets:{}};persist()}};
+$('setFav').onclick=()=>{const s=sets().find(x=>`${x.category}|||${x.set}`===activeSet);if(!s)return;const all=s.questions.every(q=>favorites.has(q.id));s.questions.forEach(q=>all?favorites.delete(q.id):favorites.add(q.id));persist();renderSet()};
+// cloud
+function cfg(){return load(K.CFG,{url:'',key:''})}function renderSync(msg=''){if(msg){$('syncStatus').textContent=msg;return}if(!sb)$('syncStatus').textContent='Supabase未設定。端末内保存のみ。';else if(user)$('syncStatus').textContent=`ログイン中: ${user.email||user.id}`;else $('syncStatus').textContent='Supabase接続済み。ログインしてください。'}
+async function initCloud(){const c=cfg();$('supabaseUrl').value=c.url||'';$('supabaseKey').value=c.key||'';if(!c.url||!c.key||!window.supabase){renderSync();return}try{sb=window.supabase.createClient(c.url,c.key);const {data}=await sb.auth.getSession();user=data.session?.user||null;sb.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;renderSync()});renderSync()}catch(e){renderSync('設定エラー: '+e.message)}}
+$('saveCloud').onclick=()=>{saveK(K.CFG,{url:$('supabaseUrl').value.trim(),key:$('supabaseKey').value.trim()});initCloud()};$('signUp').onclick=async()=>{if(!sb)return alert('先に設定してください');const {error}=await sb.auth.signUp({email:$('email').value,password:$('password').value});alert(error?error.message:'登録処理を行いました。メール確認が有効な場合は、届いた確認メールを開いてからログインしてください。')};$('signIn').onclick=async()=>{if(!sb)return alert('先に設定してください');const {error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});if(error)alert(error.message);else{const {data}=await sb.auth.getSession();user=data.session?.user||null;renderSync()}};$('signOut').onclick=async()=>{if(sb)await sb.auth.signOut();user=null;renderSync()};
+function cloudSnapshot(){return {app:'Wine Q&A Drill',appVersion:APP_VERSION,dataVersion:DATA_VERSION,questions,progress,meta,favorites:[...favorites]}}
+async function push(silent=false){
+  if(!sb||!user){if(!silent)alert('ログインしてください');return}
+  const payload={user_id:user.id,data:cloudSnapshot(),updated_at:new Date().toISOString()};
+  const {error}=await sb.from('wine_qa_user_data').upsert(payload,{onConflict:'user_id'});
+  if(!silent)alert(error?error.message:'クラウドへ保存しました')
+}
+async function pull(){
+  if(!sb||!user)return alert('ログインしてください');
+  const {data,error}=await sb.from('wine_qa_user_data').select('data,updated_at').eq('user_id',user.id).maybeSingle();
+  if(error)return alert(error.message);
+  if(!data)return alert('クラウドに保存データがまだありません。まずPC側で「クラウドへ保存」を押してください。');
+  const z=data.data||{};
+  questions=z.questions||[];
+  progress=z.progress||{};
+  meta=z.meta||{sets:{}};
+  meta.order=meta.order||{categories:[],sets:{},questions:{}};
+  favorites=new Set(z.favorites||[]);
+  ensureOrder();
+  saveK(K.Q,questions);saveK(K.P,progress);saveK(K.M,meta);saveK(K.F,[...favorites]);
+  renderAll();
+  alert('クラウドから読み込みました。')
+}
+$('pushCloud').onclick=()=>push(false);$('pullCloud').onclick=pull;let timer;function autoPush(){if(!sb||!user)return;clearTimeout(timer);timer=setTimeout(()=>push(true),1200)}
+ensureOrder();$('versionInfo').textContent=`アプリ v${APP_VERSION} / データ形式 v${DATA_VERSION}`;renderAll();showScreen('home');initCloud();if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+</script>
+</body>
+</html>
